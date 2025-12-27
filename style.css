@@ -16,12 +16,17 @@ body {
 .grid-overlay { position: absolute; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 50px 50px; z-index: -2; }
 
 /* --- NAVIGASI --- */
-.navigation { position: relative; z-index: 100; margin-bottom: 30px; display: flex; gap: 10px; }
+.navigation { position: relative; z-index: 100; margin-bottom: 30px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .nav-btn { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 10px 25px; border-radius: 30px; cursor: pointer; transition: 0.3s; }
 .nav-btn.active, .nav-btn:hover { background: #00d2ff; color: black; box-shadow: 0 0 15px #00d2ff; }
 
 /* --- STAGE --- */
-.stage-container { position: relative; width: 320px; height: 480px; display: flex; justify-content: center; transform-style: preserve-3d; }
+.stage-container { 
+    position: relative; width: 320px; height: 480px; 
+    display: flex; justify-content: center; 
+    transform-style: preserve-3d; 
+    transition: 0.5s; /* Smooth jika resize layar */
+}
 
 /* --- KARTU --- */
 .card {
@@ -39,11 +44,9 @@ body {
 /* --- POSISI & LAYER (FIXED Z-INDEX) --- */
 /* Center: Paling depan, interaksi aktif */
 .position-center { 
-    z-index: 100; 
-    opacity: 1; 
+    z-index: 100; opacity: 1; 
     transform: translateX(0) scale(1) translateZ(0); 
-    border-color: #00d2ff; 
-    filter: brightness(1); 
+    border-color: #00d2ff; filter: brightness(1); 
     cursor: default; 
 }
 
@@ -53,21 +56,13 @@ body {
 
 .position-left:hover, .position-right:hover { filter: brightness(0.8); z-index: 60; }
 
-
 /* --- ITEM STYLE & LOGIC CLICK --- */
 .item { background: rgba(0,0,0,0.3); width: 100%; padding: 10px; margin-top: 10px; border-radius: 10px; text-align: left; transition: 0.3s; position: relative; }
 .clickable-item:hover { background: rgba(0, 210, 255, 0.2); transform: translateX(5px); border-left: 3px solid #00d2ff; }
 
 /* [FIX PENTING] */
-/* Item di kartu samping TIDAK BISA DIKLIK (supaya tidak bentrok dengan klik ganti kartu) */
-.card:not(.position-center) .clickable-item {
-    pointer-events: none; /* Mouse tembus ke kartu belakang */
-}
-/* Item di kartu tengah BISA DIKLIK dan Kursus Pointer */
-.position-center .clickable-item {
-    pointer-events: auto;
-    cursor: pointer;
-}
+.card:not(.position-center) .clickable-item { pointer-events: none; }
+.position-center .clickable-item { pointer-events: auto; cursor: pointer; }
 
 .profile-img img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #00d2ff; margin-bottom: 15px; }
 .neon-cyan { color: #00d2ff; text-shadow: 0 0 10px #00d2ff; margin-bottom: 15px; }
@@ -92,3 +87,61 @@ h1,h2,h3,p { margin: 5px 0; }
 .whatsapp { background: rgba(37, 211, 102, 0.2); border-color: #25D366; }
 .linkedin { background: rgba(0, 119, 181, 0.2); border-color: #0077B5; }
 .instagram { background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); border: none; }
+
+/* ========================================= */
+/* === MOBILE RESPONSIVE (MEDIA QUERIES) === */
+/* ========================================= */
+
+@media (max-width: 768px) {
+    /* 1. Sesuaikan Ukuran Stage */
+    .stage-container {
+        width: 85vw; /* Lebar mengikuti layar HP */
+        height: 60vh; /* Tinggi dikurangi agar muat */
+        max-width: 320px;
+    }
+
+    /* 2. Sembunyikan Kartu Samping agar tidak menumpuk di layar kecil */
+    .position-left {
+        transform: translateX(-20%) scale(0.8) translateZ(-50px);
+        opacity: 0; /* Hide visual */
+        pointer-events: none;
+    }
+    .position-right {
+        transform: translateX(20%) scale(0.8) translateZ(-50px);
+        opacity: 0; /* Hide visual */
+        pointer-events: none;
+    }
+    /* Pastikan center tetap terlihat jelas */
+    .position-center {
+        width: 100%;
+        transform: none !important; /* Force flat di mobile */
+    }
+
+    /* 3. Sesuaikan Navigasi */
+    .navigation {
+        margin-bottom: 15px;
+        gap: 5px;
+    }
+    .nav-btn {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    /* 4. Sesuaikan FAB (Tombol Bulat) */
+    .fab-btn {
+        width: 45px; height: 45px; font-size: 18px; bottom: 20px;
+    }
+    .fab-left { left: 15px; }
+    .fab-right { right: 15px; }
+
+    /* 5. Font Size Adjustment */
+    h1 { font-size: 1.2rem; }
+    h2 { font-size: 1.3rem; }
+    p { font-size: 0.8rem; }
+    .item h3 { font-size: 1rem; }
+    
+    .modal-content {
+        width: 85%;
+        padding: 20px;
+    }
+}
