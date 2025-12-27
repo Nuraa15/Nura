@@ -61,13 +61,12 @@ function switchCard(type) {
     }
 }
 
-// --- LOGIKA TILT 3D (DIPERBAIKI) ---
+// --- LOGIKA TILT 3D (OPTIMAL UNTUK RESPONSIVE) ---
 
-// Fungsi untuk dipanggil dari HTML (onmouseenter/leave)
 function pauseTilt(shouldPause) {
     isTiltPaused = shouldPause;
     
-    // Jika dipause (mouse di atas tombol), reset posisi kartu agar datar (mudah diklik)
+    // Jika dipause (mouse di atas tombol), reset posisi kartu
     if (shouldPause) {
         const activeCard = document.querySelector('.position-center');
         if (activeCard) {
@@ -77,8 +76,9 @@ function pauseTilt(shouldPause) {
 }
 
 stage.addEventListener('mousemove', (e) => {
-    // Cek 1: Apakah sedang pause? (Mouse di atas tombol)
-    // Cek 2: Apakah ada modal terbuka?
+    // UPDATE: Cek Device! Jika lebar layar < 768px (HP), jangan jalankan efek tilt
+    if (window.innerWidth <= 768) return; 
+
     if (isTiltPaused || document.querySelector('.modal-overlay.active')) return;
 
     const activeCard = document.querySelector('.position-center');
@@ -104,6 +104,14 @@ stage.addEventListener('mouseleave', () => {
     }
 });
 
+// UPDATE: Reset posisi jika layar di-resize
+window.addEventListener('resize', () => {
+    const activeCard = document.querySelector('.position-center');
+    if(activeCard) {
+        activeCard.style.transform = `translateX(0) scale(1) translateZ(0)`;
+    }
+});
+
 
 // --- MODAL SYSTEM ---
 function toggleModal(modalId) {
@@ -117,35 +125,29 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
     });
 });
 
-// --- SHOW DETAILS (FIXED) ---
+// --- SHOW DETAILS ---
 function showDetails(event, id) {
-    // 1. Stop penyebaran klik ke kartu belakang
     event.stopPropagation(); 
-
-    // 2. Debugging (Cek di Console browser jika error)
     console.log("Mencoba membuka ID:", id);
 
     const data = detailsDatabase[id];
     
     if (data) {
-        // Isi Data
         document.getElementById('detail-title').innerText = data.title;
         document.getElementById('detail-desc').innerHTML = data.desc;
         document.getElementById('detail-link').href = data.link;
 
         const imgElement = document.getElementById('detail-image');
-        if (data.img) {
+        if (data.img && data.img !== '-') {
             imgElement.src = data.img;
             imgElement.style.display = 'block';
         } else {
             imgElement.style.display = 'none';
         }
 
-        // Buka Modal
         toggleModal('detailsModal');
     } else {
         console.error("Data tidak ditemukan untuk ID:", id);
-        alert("Maaf, detail untuk item ini belum tersedia.");
     }
 }
 
