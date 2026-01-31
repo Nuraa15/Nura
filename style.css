@@ -305,7 +305,7 @@ p { margin: 0; font-size: 0.85rem; color: #ccc; }
         
         /* POSISI BAWAH */
         bottom: 30px; 
-        bottom: calc(30px + env(safe-area-inset-bottom)); 
+        bottom: calc(60px + env(safe-area-inset-bottom)); 
         
         /* RUMUS MENGAHKAN POSISI ABSOLUTE */
         left: 50%; 
