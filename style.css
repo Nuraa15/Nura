@@ -259,9 +259,9 @@ p { margin: 0; font-size: 0.85rem; color: #ccc; }
 
     /* 2. SOLUSI KARTU TERPOTONG (Ukuran Lebih Aman) */
     .card { 
-        width: 60vw;      /* Lebar hanya 60% layar (sebelumnya 75%) */
-        left: 20vw;       /* Posisi pas di tengah (100-60)/2 */
-        padding: 15px;    /* Padding dalam diperkecil */
+        width: 68vw;      /* Lebar hanya 60% layar (sebelumnya 75%) */
+        left: 16vw;       /* Posisi pas di tengah (100-60)/2 */
+        padding: 20px;    /* Padding dalam diperkecil */
     }
     
     /* LOGIKA GESER KARTU (Matematika agar masuk layar) */
@@ -274,29 +274,34 @@ p { margin: 0; font-size: 0.85rem; color: #ccc; }
     /* Kartu Kiri: Geser dikit & Dorong ke belakang */
     .position-left { 
         /* Geser hanya -15% agar tidak nabrak kiri layar */
-        transform: translateX(-15%) scale(0.8) translateZ(-80px); 
+        transform: translateX(-25%) scale(0.8) translateZ(-80px); 
         opacity: 0.5; z-index: 10; pointer-events: none; 
     }
 
     /* Kartu Kanan: Geser dikit & Dorong ke belakang */
     .position-right { 
         /* Geser hanya 15% agar tidak nabrak kanan layar */
-        transform: translateX(15%) scale(0.8) translateZ(-80px); 
+        transform: translateX(25%) scale(0.8) translateZ(-80px); 
         opacity: 0.5; z-index: 10; pointer-events: none; 
     }
 
-    /* 3. SOLUSI TOMBOL HILANG (Pindah ke POJOK ATAS) */
-    /* Di HP, kita taruh tombol di atas biar 100% aman dari bar Instagram */
+    /* 3. SOLUSI TOMBOL FAB (POSISI DI ATAS NAVBAR) */
     .fab-btn {
-        bottom: auto; /* Matikan posisi bawah */
-        top: 25px;    /* Pindah ke atas */
-        width: 42px; height: 42px; 
-        font-size: 18px;
-        z-index: 9999; /* Pastikan paling depan */
+        top: auto;    /* Matikan posisi atas */
+        
+        /* Hitungan: Tinggi Navbar (~60px) + Jarak Bawah Navbar (30px) + Gap (20px) */
+        bottom: 110px; 
+        /* Support untuk HP kekinian (poni/full screen) */
+        bottom: calc(110px + env(safe-area-inset-bottom));
+        
+        width: 45px; height: 45px; 
+        font-size: 20px;
+        z-index: 2000; /* Pastikan di atas layer apapun */
     }
     
-    .fab-left { left: 20px; }   /* Tombol About di Kiri Atas */
-    .fab-right { right: 20px; } /* Tombol Contact di Kanan Atas */
+    /* Posisikan di pojok kiri & kanan layar */
+    .fab-left { left: 20px; }   
+    .fab-right { right: 20px; }
 
    /* 4. NAVIGASI DI BAWAH (FIX CENTER) */
     .navigation {
