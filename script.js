@@ -1,28 +1,34 @@
-// --- DATA BASE ---
+// --- DATA BASE (UPDATE: Tambah Data Baru) ---
 const detailsDatabase = {
     'proj-1': {
         title: 'Personal Website',
-        desc: 'Personal Website dengan gaya visual dark mode dan 3D motion ini adalah projek pertama saya yang di publikasikan',
-        link: '#',
-        img: 'image/project1.png'
+        desc: 'Website portofolio interaktif dengan efek 3D parallax dan mode gelap, dibuat menggunakan HTML, CSS, dan JS murni.',
+        link: 'https://nuraa15.github.io/Nura/#', img: 'image/project1.png'
     },
     'proj-2': {
-        title: '-',
-        desc: '-',
-        link: '#',
-        img: '-'
+        title: '',
+        desc: '',
+        link: '#', img: '-'
     },
     'cert-1': {
-        title: 'Dibimbing Network Engineer',
-        desc: 'Sertifikasi fundamental mengenai Network Engineer.',
-        link: '#',
-        img: 'image/dibimbing.jpg'
+        title: 'Dibimbing.id - Network Engineer',
+        desc: 'Pelatihan intensif mengenai dasar jaringan komputer, subnetting, dan konfigurasi router.',
+        link: '#', img: 'image/dibimbing.jpg'
     },
     'cert-2': {
-        title: 'Fiber To The x',
-        desc: 'Workshop Overview Telkomsel mengenai FTTx (Fiber To The x).',
-        link: '#',
-        img : 'image/Telkom.jpg'
+        title: 'Telkom Indonesia - FTTx',
+        desc: 'Workshop teknis mengenai instalasi dan pemeliharaan jaringan Fiber Optic (FTTx).',
+        link: '#', img: 'image/Telkom.jpg'
+    },
+    'cert-3': {
+        title: 'AWS Training & Certification',
+        desc: 'Sertifikasi Cloud Essential Knowladge badge Assessment.',
+        link: '#', img: 'image/AWS.jpeg' 
+    },
+    'cert-4': {
+        title: 'Telkom Akses Bekasi',
+        desc: 'Berpartisipasi Mengikuti Kegiatan Company Visit PT. Telkom Akses Bekasi.',
+        link: '#', img: '-'
     }
 };
 
@@ -30,111 +36,145 @@ const detailsDatabase = {
 const cardProfile = document.getElementById('card-profile');
 const cardProjects = document.getElementById('card-projects');
 const cardCerts = document.getElementById('card-certs');
-const btns = document.querySelectorAll('.nav-btn');
 const stage = document.querySelector('.stage-container');
-let isTiltPaused = false; // Flag untuk menghentikan gerak 3D saat hover tombol
 
-// --- NAVIGASI & KARTU ---
-function resetNav() { btns.forEach(btn => btn.classList.remove('active')); }
+const btnProfile = document.getElementById('btn-profile');
+const btnProjects = document.getElementById('btn-projects');
+const btnCerts = document.getElementById('btn-certs');
+const allBtns = [btnProjects, btnProfile, btnCerts];
 
+let isTiltPaused = false;
+
+// --- LOGIKA POSISI NAVIGASI DINAMIS ---
+// Fungsi ini mengubah urutan tombol (order css) agar tombol aktif selalu di tengah
+function updateNavOrder(activeType) {
+    // Reset kelas active visual
+    allBtns.forEach(btn => btn.classList.remove('active'));
+
+    // Menggunakan CSS Flexbox Order:
+    // Order 1 = Kiri, Order 2 = Tengah (Aktif), Order 3 = Kanan
+    
+    if (activeType === 'profile') {
+        btnProfile.classList.add('active');
+        // Susunan: Project (Kiri) - Profile (Tengah) - Certs (Kanan)
+        btnProjects.style.order = "1";
+        btnProfile.style.order = "2";
+        btnCerts.style.order = "3";
+    } 
+    else if (activeType === 'projects') {
+        btnProjects.classList.add('active');
+        // Susunan: Certs (Kiri) - Projects (Tengah) - Profile (Kanan)
+        // (Asumsi putaran kartu: Certs ada di kiri Projects)
+        btnCerts.style.order = "1";
+        btnProjects.style.order = "2";
+        btnProfile.style.order = "3";
+    } 
+    else if (activeType === 'certs') {
+        btnCerts.classList.add('active');
+        // Susunan: Profile (Kiri) - Certs (Tengah) - Project (Kanan)
+        btnProfile.style.order = "1";
+        btnCerts.style.order = "2";
+        btnProjects.style.order = "3";
+    }
+}
+
+// --- LOGIKA GANTI KARTU ---
 function setPositions(center, left, right) {
+    // Reset class & transform
     [center, left, right].forEach(card => {
         card.className = 'card'; 
-        card.style.transform = ''; // Reset transform manual
+        card.style.transform = ''; 
     });
+    
+    // Assign class posisi baru
     center.classList.add('position-center');
     left.classList.add('position-left');
     right.classList.add('position-right');
 }
 
 function switchCard(type) {
-    resetNav();
+    // 1. Update urutan tombol Navbar agar tombol aktif pindah ke tengah
+    updateNavOrder(type);
+
+    // 2. Putar Kartu
     if (type === 'profile') {
-        document.getElementById('btn-profile').classList.add('active');
         setPositions(cardProfile, cardProjects, cardCerts);
     } else if (type === 'projects') {
-        document.getElementById('btn-projects').classList.add('active');
         setPositions(cardProjects, cardCerts, cardProfile);
     } else if (type === 'certs') {
-        document.getElementById('btn-certs').classList.add('active');
         setPositions(cardCerts, cardProfile, cardProjects);
     }
 }
 
-// --- LOGIKA TILT 3D (OPTIMAL UNTUK RESPONSIVE) ---
-
-function pauseTilt(shouldPause) {
-    isTiltPaused = shouldPause;
-    
-    // Jika dipause (mouse di atas tombol), reset posisi kartu
-    if (shouldPause) {
-        const activeCard = document.querySelector('.position-center');
-        if (activeCard) {
-            activeCard.style.transform = `translateX(0) scale(1) translateZ(0) rotateX(0) rotateY(0)`;
-        }
-    }
-}
+// --- LOGIKA TILT 3D (VERSI STABIL / ANTI-LAG) ---
 
 stage.addEventListener('mousemove', (e) => {
-    // UPDATE: Cek Device! Jika lebar layar < 768px (HP), jangan jalankan efek tilt
+    // 1. Cek Device HP (tetap matikan di HP)
     if (window.innerWidth <= 768) return; 
 
-    if (isTiltPaused || document.querySelector('.modal-overlay.active')) return;
+    // 2. Cek apakah ada Modal terbuka?
+    if (document.querySelector('.modal-overlay.active')) return;
+
+    // 3. DETEKSI PINTAR: Apakah mouse sedang di atas item yang bisa diklik?
+    // Jika YA, hentikan perhitungan tilt (return) agar kartu diam & stabil.
+    if (e.target.closest('.clickable-item') || e.target.closest('.nav-btn')) {
+        return; 
+    }
 
     const activeCard = document.querySelector('.position-center');
     if(activeCard) { 
         const rect = stage.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        const centerX = rect.width / 2; const centerY = rect.height / 2;
+        const centerX = rect.width / 2; 
+        const centerY = rect.height / 2;
         
-        // Sensitivitas
+        // Sensitivitas Tilt
         const rotateX = ((y - centerY) / 25) * -1; 
         const rotateY = (x - centerX) / 25;
         
+        // Update posisi hanya jika TIDAK sedang hover item
         activeCard.style.transform = `translateX(0) scale(1) translateZ(0) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
     }
 });
 
+// Reset saat mouse keluar stage
 stage.addEventListener('mouseleave', () => {
     const activeCard = document.querySelector('.position-center');
     if(activeCard) {
         activeCard.style.transition = 'transform 0.5s ease';
-        activeCard.style.transform = `translateX(0) scale(1) translateZ(0) rotateX(0) rotateY(0)`;
-    }
-});
-
-// UPDATE: Reset posisi jika layar di-resize
-window.addEventListener('resize', () => {
-    const activeCard = document.querySelector('.position-center');
-    if(activeCard) {
         activeCard.style.transform = `translateX(0) scale(1) translateZ(0)`;
     }
 });
 
+// (Pastikan fungsi pauseTilt yang lama DIHAPUS atau DIKOSONGKAN saja agar tidak bentrok)
+function pauseTilt(shouldPause) {
+    // Tidak perlu melakukan apa-apa lagi di sini karena sudah dihandle di mousemove
+}
+
+window.addEventListener('resize', () => {
+    const activeCard = document.querySelector('.position-center');
+    if(activeCard) activeCard.style.transform = `translateX(0) scale(1) translateZ(0)`;
+});
 
 // --- MODAL SYSTEM ---
 function toggleModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) modal.classList.toggle('active');
 }
-
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', (e) => {
         if (e.target === overlay) overlay.classList.remove('active');
     });
 });
 
-// --- SHOW DETAILS ---
+// --- DETAIL SYSTEM ---
 function showDetails(event, id) {
-    event.stopPropagation(); 
-    console.log("Mencoba membuka ID:", id);
-
+    event.stopPropagation();
     const data = detailsDatabase[id];
-    
     if (data) {
         document.getElementById('detail-title').innerText = data.title;
-        document.getElementById('detail-desc').innerHTML = data.desc;
+        document.getElementById('detail-desc').innerText = data.desc;
         document.getElementById('detail-link').href = data.link;
 
         const imgElement = document.getElementById('detail-image');
@@ -144,12 +184,23 @@ function showDetails(event, id) {
         } else {
             imgElement.style.display = 'none';
         }
-
         toggleModal('detailsModal');
-    } else {
-        console.error("Data tidak ditemukan untuk ID:", id);
     }
 }
 
-// Init
+const textToType = "coffee, code, music and game";
+const typingElement = document.getElementById('typing-text');
+let typeIndex = 0;
+
+function typeWriter() {
+    if (typeIndex < textToType.length) {
+        typingElement.innerHTML += textToType.charAt(typeIndex);
+        typeIndex++;
+        setTimeout(typeWriter, 100); // Kecepatan ngetik
+    }
+}
+// Jalankan saat load
+window.onload = typeWriter;
+
+// Init saat load
 switchCard('profile');
