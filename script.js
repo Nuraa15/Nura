@@ -28,7 +28,7 @@ const detailsDatabase = {
     'cert-4': {
         title: 'Telkom Akses Bekasi',
         desc: 'Berpartisipasi Mengikuti Kegiatan Company Visit PT. Telkom Akses Bekasi.',
-        link: '#', img: '-'
+        link: '#', img: 'image/Telkom Akses Bekasi.jpeg'
     }
 };
 

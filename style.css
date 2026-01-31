@@ -3,7 +3,11 @@ body {
     margin: 0; padding: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #0f0c29;
-    height: 100vh; width: 100vw;
+    /* GANTI INI */
+    min-height: 100vh;
+    height: 100dvh; /* Solusi agar tidak tertutup address bar HP */
+    /* ---------- */
+    width: 100vw;
     overflow: hidden; 
     perspective: 1000px;
     color: white;
@@ -247,40 +251,60 @@ p { margin: 0; font-size: 0.85rem; color: #ccc; }
 @media (max-width: 768px) {
     /* 1. Stage menyesuaikan layar HP */
     .stage-container {
-        width: 100%; height: 55vh;
-        margin-top: -30px; /* Geser naik dikit */
+        width: 100%; 
+        height: 50vh; /* Sedikit dikurangi agar tidak terlalu mepet bawah */
+        margin-top: -40px; 
         perspective: 800px;
     }
 
-    /* 2. Kartu Responsif */
-    .card { width: 75vw; left: 12.5vw; padding: 15px; }
+    /* 2. Kartu Responsif - UKURAN DIPERKECIL AGAR TIDAK TERPOTONG */
+    /* Sebelumnya 75vw terlalu lebar saat digeser */
+    .card { 
+        width: 65vw;      /* Kurangi lebar kartu */
+        left: 17.5vw;     /* Posisi tengah: (100 - 65) / 2 = 17.5 */
+        padding: 15px; 
+    }
     
-    /* 3. Logic Posisi Kartu Mobile */
-    .position-left { transform: translateX(-25%) scale(0.8) translateZ(-60px); opacity: 0.4; z-index: 10; pointer-events: none; }
-    .position-right { transform: translateX(25%) scale(0.8) translateZ(-60px); opacity: 0.4; z-index: 10; pointer-events: none; }
-    .position-center { transform: translateX(0) scale(1) translateZ(0); }
+    /* 3. Logic Posisi Kartu Mobile - DIGESER LEBIH RAPAT */
+    /* TranslateX dikurangi dari 25% ke 15% agar tidak keluar layar */
+    .position-left { 
+        transform: translateX(-15%) scale(0.8) translateZ(-60px); 
+        opacity: 0.4; z-index: 10; pointer-events: none; 
+    }
+    .position-right { 
+        transform: translateX(15%) scale(0.8) translateZ(-60px); 
+        opacity: 0.4; z-index: 10; pointer-events: none; 
+    }
+    .position-center { 
+        transform: translateX(0) scale(1) translateZ(0); 
+    }
 
-    /* 4. NAVBAR PINDAH KE BAWAH */
+    /* 4. NAVBAR PINDAH KE BAWAH - DIPOSISIKAN LEBIH TINGGI */
     .navigation {
-        top: auto; /* Hapus posisi atas */
-        bottom: 90px; /* Taruh di bawah, di atas FAB */
-        width: 80%;
+        top: auto; 
+        bottom: 110px; /* Naikkan agar tidak menabrak FAB */
+        width: 85%;    /* Sedikit lebih lebar */
         justify-content: center;
-        background: rgba(15, 12, 41, 0.9);
+        background: rgba(15, 12, 41, 0.95);
         border: 1px solid #00d2ff;
         box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
     }
     
     .nav-btn { padding: 8px 10px; font-size: 13px; }
 
-    /* 5. FAB menyesuaikan */
-    .fab-btn { bottom: 25px; width: 45px; height: 45px; }
-    .fab-left { left: 20px; }
-    .fab-right { right: 20px; }
+    /* 5. FAB MENYESUAIKAN - NAIKKAN POSISI */
+    /* Menggunakan safe-area-inset untuk iPhone X ke atas */
+    .fab-btn { 
+        bottom: 40px; /* Default lebih tinggi */
+        bottom: calc(40px + env(safe-area-inset-bottom)); /* Support HP poni/fullscreen */
+        width: 45px; height: 45px; 
+    }
+    .fab-left { left: 25px; }
+    .fab-right { right: 25px; }
 
     /* 6. Typography adjustments */
-    .neon-cyan, .neon-pink { font-size: 1.4rem; }
-    h1 { font-size: 1.3rem; }
+    .neon-cyan, .neon-pink { font-size: 1.3rem; }
+    h1 { font-size: 1.2rem; }
 }
 
 .cursor { animation: blink 1s infinite; color: #00d2ff; }
