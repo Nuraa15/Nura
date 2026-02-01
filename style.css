@@ -289,7 +289,7 @@ p { margin: 0; font-size: 0.85rem; color: #ccc; }
     /* Di HP, kita taruh tombol di atas biar 100% aman dari bar Instagram */
     .fab-btn {
         bottom: auto; /* Matikan posisi bawah */
-        top: 25px;    /* Pindah ke atas */
+        top: 35px;    /* Pindah ke atas */
         width: 42px; height: 42px; 
         font-size: 18px;
         z-index: 9999; /* Pastikan paling depan */
@@ -305,7 +305,7 @@ p { margin: 0; font-size: 0.85rem; color: #ccc; }
         
         /* POSISI BAWAH */
         bottom: 30px; 
-        bottom: calc(60px + env(safe-area-inset-bottom)); 
+        bottom: calc(70px + env(safe-area-inset-bottom)); 
         
         /* RUMUS MENGAHKAN POSISI ABSOLUTE */
         left: 50%; 
