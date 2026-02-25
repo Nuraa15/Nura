@@ -6,9 +6,9 @@ const detailsDatabase = {
         link: 'https://nuraa15.github.io/Nura/#', img: 'image/project1.png'
     },
     'proj-2': {
-        title: '',
-        desc: '',
-        link: '#', img: '-'
+        title: 'To Do List Website',
+        desc: 'Web yang berfungsi untuk membuat list pekerjaan yang ingin dilakukan dan menandai pekerjaan tersebut apakah sudah selesai atau belum',
+        link: 'https://nuraa15.github.io/CodingCamp-18Feb26-Suryanurahman/', img: 'image/project2.png'
     },
     'cert-1': {
         title: 'Dibimbing.id - Network Engineer',
@@ -29,6 +29,11 @@ const detailsDatabase = {
         title: 'Telkom Akses Bekasi',
         desc: 'Berpartisipasi Mengikuti Kegiatan Company Visit PT. Telkom Akses Bekasi.',
         link: '#', img: 'image/Telkom Akses Bekasi.jpeg'
+    },
+    'cert-5': {
+        title: 'RevoU CodingCamp',
+        desc: 'Sertikfikat yang didapatkan melalui kursus online CodingCamp Software Engineering yang diadakan RevoU selama 5 hari, dengan syarat harus menyelesaikan Assignments dan mini project berupa website To Do List.',
+        link: 'https://nuraa15.github.io/CodingCamp-18Feb26-Suryanurahman/', img: 'image/RevoU_Shoftware_Engineering.jpg'
     }
 };
 
@@ -105,38 +110,6 @@ function switchCard(type) {
         setPositions(cardCerts, cardProfile, cardProjects);
     }
 }
-
-// --- LOGIKA TILT 3D (VERSI STABIL / ANTI-LAG) ---
-
-stage.addEventListener('mousemove', (e) => {
-    // 1. Cek Device HP (tetap matikan di HP)
-    if (window.innerWidth <= 768) return; 
-
-    // 2. Cek apakah ada Modal terbuka?
-    if (document.querySelector('.modal-overlay.active')) return;
-
-    // 3. DETEKSI PINTAR: Apakah mouse sedang di atas item yang bisa diklik?
-    // Jika YA, hentikan perhitungan tilt (return) agar kartu diam & stabil.
-    if (e.target.closest('.clickable-item') || e.target.closest('.nav-btn')) {
-        return; 
-    }
-
-    const activeCard = document.querySelector('.position-center');
-    if(activeCard) { 
-        const rect = stage.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2; 
-        const centerY = rect.height / 2;
-        
-        // Sensitivitas Tilt
-        const rotateX = ((y - centerY) / 25) * -1; 
-        const rotateY = (x - centerX) / 25;
-        
-        // Update posisi hanya jika TIDAK sedang hover item
-        activeCard.style.transform = `translateX(0) scale(1) translateZ(0) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    }
-});
 
 // Reset saat mouse keluar stage
 stage.addEventListener('mouseleave', () => {
