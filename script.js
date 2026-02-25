@@ -13,27 +13,27 @@ const detailsDatabase = {
     'cert-1': {
         title: 'Dibimbing.id - Network Engineer',
         desc: 'Pelatihan intensif mengenai dasar jaringan komputer, subnetting, dan konfigurasi router.',
-        link: 'http://127.0.0.1:5500/image/dibimbing.jpg', img: 'image/dibimbing.jpg'
+        link: 'image/dibimbing.jpg', img: 'image/dibimbing.jpg'
     },
     'cert-2': {
         title: 'Telkom Indonesia - FTTx',
         desc: 'Workshop teknis mengenai instalasi dan pemeliharaan jaringan Fiber Optic (FTTx).',
-        link: 'http://127.0.0.1:5500/image/Telkom.jpg', img: 'image/Telkom.jpg'
+        link: 'image/Telkom.jpg', img: 'image/Telkom.jpg'
     },
     'cert-3': {
         title: 'AWS Training & Certification',
         desc: 'Sertifikasi Cloud Essential Knowladge badge Assessment.',
-        link: 'http://127.0.0.1:5500/image/AWS.jpeg', img: 'image/AWS.jpeg' 
+        link: 'image/AWS.jpeg', img: 'image/AWS.jpeg' 
     },
     'cert-4': {
         title: 'Telkom Akses Bekasi',
         desc: 'Berpartisipasi Mengikuti Kegiatan Company Visit PT. Telkom Akses Bekasi.',
-        link: 'http://127.0.0.1:5500/image/Telkom%20Akses%20Bekasi.jpeg', img: 'image/Telkom Akses Bekasi.jpeg'
+        link: 'image/Telkom%20Akses%20Bekasi.jpeg', img: 'image/Telkom Akses Bekasi.jpeg'
     },
     'cert-5': {
         title: 'RevoU CodingCamp',
         desc: 'Sertikfikat yang didapatkan melalui kursus online CodingCamp Software Engineering yang diadakan RevoU selama 5 hari, dengan syarat harus menyelesaikan Assignments dan mini project berupa website To Do List.',
-        link: 'http://127.0.0.1:5500/image/RevoU_Shoftware_Engineering.jpg', img: 'image/RevoU_Shoftware_Engineering.jpg'
+        link: 'image/RevoU_Shoftware_Engineering.jpg', img: 'image/RevoU_Shoftware_Engineering.jpg'
     }
 };
 
